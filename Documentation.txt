@@ -1,0 +1,102 @@
+
+############################################################################################################################################################################################################################################################################
+
+Predicates:
+
+Format : <Predicate Name>/<arity>
+
+
+1)
+group/2 :  Expects two parameters. List of elements, operator list. Returns true if the defined list and operations form a group.
+					 The predicate checks closure, associativity, existence and uniqueness of identity, followed by existence of inverse before returning false.
+					 Example : group([0,1,2],[[0,0,0],[0,1,1],[0,2,2],[1,0,1],[1,1,2],[1,2,0],[2,0,2],[2,1,0],[2,2,1]])
+
+2)
+closed/2 : Expects two parameters. List of elements, operator list. Checks whether the group is closed or not. Writes out elements that don't belong to the group.
+					 Example: closed([0,1,2],[[0,0,0],[0,1,1],[0,2,2],[1,0,1],[1,1,2],[1,2,0],[2,0,2],[2,1,0],[2,2,1]])
+
+
+3)
+associativeHelper/2 : Expects two parameters. List of elements, operator list. Checks whether the group operation is associative or not.
+											Example: associativeHelper([0,1,2],[[0,0,0],[0,1,1],[0,2,2],[1,0,1],[1,1,2],[1,2,0],[2,0,2],[2,1,0],[2,2,1]])
+
+
+4)
+identityHelper/3: Expects two parameters, with the third one being a variable which is set to the identity element. List of elements, operator list. The third is a variable in which a possible value of the identity element of the operation defined is returned.
+									Example: identityHelper([0,1,2],[[0,0,0],[0,1,1],[0,2,2],[1,0,1],[1,1,2],[1,2,0],[2,0,2],[2,1,0],[2,2,1]], I)
+									Output: The variable I will return the value 0.
+
+
+
+5)
+inverse/2: Expects two parameters. List of elements, operator list. Checks whether each element has an inverse but calls the identityHelper to compute identity.
+					 Example: inverse([0,1,2],[[0,0,0],[0,1,1],[0,2,2],[1,0,1],[1,1,2],[1,2,0],[2,0,2],[2,1,0],[2,2,1]])
+
+6)
+inverse/3: Expects three parameters. List of elements, operator list and the identity element. Checks whether each element has an inverse.
+					 Example: inverse([0,1,2],[[0,0,0],[0,1,1],[0,2,2],[1,0,1],[1,1,2],[1,2,0],[2,0,2],[2,1,0],[2,2,1]],0)
+
+
+7)
+abelianHelper/1: Expects a single parameters, the operator list and checks the commutativity of the group.
+								 Example: abelian([[0,0,0],[0,1,1],[0,2,2],[1,0,1],[1,1,2],[1,2,0],[2,0,2],[2,1,0],[2,2,1]]))
+
+
+Miscellaneous Predicates: There are other predicates which are merely for membership purposes and existence verification. Moreover, the helper predicates have corresponding internal predicates.
+
+
+
+############################################################################################################################################################################################################################################################################
+
+Input Format:
+
+The predicate defined as "group" accepts 2 parameters, the list of elements (S), and the operator list (Op). S is a single list with comma separated elements of the group. The operator list is a list of lists where each sublist [a,b,c] denotes ('a' Op 'b' = c)
+
+Example: List of elements (S) :- [0,1,2]
+		 		 Operator List (Op)   :- [[0,0,0],[0,1,1],[0,2,2],[1,0,1],[1,1,2],[1,2,0],[2,0,2],[2,1,0],[2,2,1]]
+
+#Repetition of operations are allowed and ignored.
+# We are assuming that the operator list is complete. Complete in the sense that the operation is defined for each element of the group with every element (including itself) of the group. If incomplete it doesn't completely define a group.
+
+Output Format:
+
+Semantic of the predicate defined as in the Predicates section below. Code returns true or false accordingly.
+# In case there exists an element in the Operator List (Op) which does not belong to the list of elements (S), then we output the corresponding element like "<element> is invalid".
+# In case the group is not abelian, then along with "false", we also express this fact with a statement "is not abelian". This is merely for our self-learning process and does not serve any purpose.
+
+############################################################################################################################################################################################################################################################################
+
+
+Test Cases
+_____________________________________________________________
+
+
+Examples of Groups:
+
+1) Dihedral group of order 6:
+
+group([0,1,2,3,4,5],[[0,0,0],[0,1,1],[0,2,2],[0,3,3],[0,4,4],[0,5,5],[1,0,1],[1,1,0],[1,2,4],[1,3,5],[1,4,2],[1,5,3],[2,0,2],[2,1,5],[2,2,0],[2,3,4],[2,4,3],[2,5,1],[3,0,3],[3,1,4],[3,2,5],[3,3,0],[3,4,1],[3,5,2],[4,0,4],[4,1,3],[4,2,1],[4,3,2],[4,4,5],[4,5,0],[5,0,5],[5,1,2],[5,2,3],[5,3,1],[5,4,0],[5,5,4]]).
+
+2) Klien-4 Group
+group([1,a,b,c],[[1,1,1],[1,a,a],[1,b,b],[1,c,c],[a,1,a],[a,a,b],[a,b,c],[a,c,1],[b,1,b],[b,a,c],[b,b,1],[b,c,a],[c,1,c],[c,a,1],[c,b,a],[c,c,b]]).
+
+
+3) Addition modulo 3 group:
+group([0,1,2],[[0,0,0],[0,1,1],[0,2,2],[1,0,1],[1,1,2],[1,2,0],[2,0,2],[2,1,0],[2,2,1]])
+
+4) Modulo 9 group:
+group([0,1,2,3,4,5,6,7,8],[[0,0,0],[0,1,1],[0,2,2],[0,3,3],[0,4,4],[0,5,5],[0,6,6],[0,7,7],[0,8,8],[1,0,1],[1,1,2],[1,2,3],[1,3,4],[1,4,5],[1,5,6],[1,6,7],[1,7,8],[1,8,0],[2,0,2],[2,1,3],[2,2,4],[2,3,5],[2,4,6],[2,5,7],[2,6,8],[2,7,0],[2,8,1],[3,0,3],[3,1,4],[3,2,5],[3,3,6],[3,4,7],[3,5,8],[3,6,0],[3,7,1],[3,8,2],[4,0,4],[4,1,5],[4,2,6],[4,3,7],[4,4,8],[4,5,0],[4,6,1],[4,7,2],[4,8,3],[5,0,5],[5,1,6],[5,2,7],[5,3,8],[5,4,0],[5,5,1],[5,6,2],[5,7,3],[5,8,4],[6,0,6],[6,1,7],[6,2,8],[6,3,0],[6,4,1],[6,5,2],[6,6,3],[6,7,4],[6,8,5],[7,0,7],[7,1,8],[7,2,0],[7,3,1],[7,4,2],[7,5,3],[7,6,4],[7,7,5],[7,8,6],[8,0,8],[8,1,0],[8,2,1],[8,3,2],[8,4,3],[8,5,4],[8,6,5],[8,7,6],[8,8,7]])
+
+Note: Groups 2,3 and 4 are abelian but group 1 is not abelian.
+
+
+Counterexamples:
+
+1) Changing elements of Klien-4 group. (1 op b = a)
+group([1,a,b,c],[[1,1,1],[1,a,a],[1,b,a],[1,c,c],[a,1,a],[a,a,b],[a,b,c],[a,c,1],[b,1,b],[b,a,c],[b,b,1],[b,c,a],[c,1,c],[c,a,1],[c,b,a],[c,c,b]]).
+
+
+2) Changing elements of modulo 3 group:
+group([0,1,2],[[0,0,0],[0,1,1],[0,2,2],[1,0,1],[1,1,2],[1,2,0],[2,0,2],[2,1,2],[2,2,1]])
+
+############################################################################################################################################################################################################################################################################
